@@ -1,6 +1,5 @@
 
-      import SimpleLightbox from "simplelightbox";
-      import "simplelightbox/dist/simple-lightbox.min.css";
+     
 
       const apiKey = "41734083-bc7e7acddd543bb8e35e20b9d";
       const searchForm = document.getElementById("search-form");
