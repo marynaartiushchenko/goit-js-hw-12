@@ -96,10 +96,10 @@ searchForm.addEventListener("submit", async (event) => {
 });
 
 loadMoreBtn.addEventListener("click", async () => {
-  loader.style.display = "block";
-  currentPage++; // Increment the page for the next set of images
-  try {
-    const response = await axios.get(`https://pixabay.com/api/`, {
+  loader.textContent = "Loading images, please wait...";
+
+try {
+  const response = await axios.get(`https://pixabay.com/api/`, {
       params: {
         key: apiKey,
         q: currentQuery,
@@ -133,24 +133,27 @@ loadMoreBtn.addEventListener("click", async () => {
         position: "topRight",
       });
     }
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    iziToast.error({
-      title: "Error",
-      message: "An error occurred while fetching data. Please try again later.",
-      position: "topRight",
-    });
-  } finally {
-    loader.style.display = "none";
-    // Show/hide the "Load more" button based on totalHits and current gallery items
-    toggleLoadMoreButton();
+  }  catch (error) {
+  console.error("Error fetching data:", error);
+  iziToast.error({
+    title: "Error",
+    message: "An error occurred while fetching data. Please try again later.",
+    position: "topRight",
+  });
+} finally {
+  loader.style.display = "none"; // Hide the loader once the images are loaded
+  toggleLoadMoreButton();
+}
+loader.textContent = ""; // Set loader text to an empty string
+loader.style.display = "none"; // Hide the loader once the images are loaded
+toggleLoadMoreButton();
     // Smoothly scroll to the next set of images
     window.scrollBy({
       top: cardHeight * 2, // Scroll by twice the height of one card
       behavior: 'smooth',
     });
   }
-});
+);
 
 function updateGallery(images) {
   // Append new images to the gallery
