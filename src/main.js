@@ -34,12 +34,14 @@ searchForm.addEventListener("submit", async (event) => {
     return;
   }
 
-  // Скидання номера поточної сторінки при новому пошуку
+  // Reset current page number on a new search
   currentPage = 1;
 
   // Store the current user input
   currentQuery = query;
 
+  // Show loader with a message
+  loader.textContent = "Loading images, please wait...";
   loader.style.display = "block";
 
   try {
@@ -71,8 +73,8 @@ searchForm.addEventListener("submit", async (event) => {
 
       // Get the height of one gallery card
       const firstCard = createGalleryCard(images[0]);
-galleryContainer.appendChild(firstCard);
-cardHeight = firstCard.getBoundingClientRect().height;
+      galleryContainer.appendChild(firstCard);
+      cardHeight = firstCard.getBoundingClientRect().height;
 
       updateGallery(images);
     } else {
@@ -91,14 +93,18 @@ cardHeight = firstCard.getBoundingClientRect().height;
     });
   } finally {
     // Hide the loader once the images are loaded or an error occurs
+    loader.textContent = "";
     loader.style.display = "none";
+
     // Show/hide the "Load more" button based on totalHits and current gallery items
     toggleLoadMoreButton();
   }
 });
 
 loadMoreBtn.addEventListener("click", async () => {
-  loader.textContent = "Loading images, please wait...";
+  // Show loader with a message for "Load more" button click
+  loader.textContent = "Loading more images, please wait...";
+  loader.style.display = "block";
 
   try {
     const response = await axios.get(`https://pixabay.com/api/`, {
