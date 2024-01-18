@@ -86,7 +86,28 @@
 }
 
 .gallery {
-  width: 1128px;
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 24px;
+  column-gap: 24px;
+  justify-content: center;
+}
+
+img {
+  width: 360px;
   height: 200px;
-  flex-shrink: 0;
+}
+
+.load-more-btn {
+  height: auto;
+  border-radius: 8px;
+  background: #4e75ff;
+  color: #fff;
+  font-family: Montserrat;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.5em;
+  border: none;
+  padding: 8px 16px;
 }
