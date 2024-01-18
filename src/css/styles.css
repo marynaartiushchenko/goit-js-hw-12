@@ -30,6 +30,7 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
+  padding-bottom: 32px;
 }
 
 .search-box label {
@@ -99,6 +100,7 @@ img {
 }
 
 .load-more-btn {
+  display: flex;
   height: auto;
   border-radius: 8px;
   background: #4e75ff;
