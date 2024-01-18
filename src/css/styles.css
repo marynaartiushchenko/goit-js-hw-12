@@ -118,6 +118,13 @@ img {
   height: 200px;
 }
 
+footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
 .load-more-btn {
   height: auto;
   border-radius: 8px;
@@ -133,5 +140,4 @@ img {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
 }
