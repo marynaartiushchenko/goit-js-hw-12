@@ -34,6 +34,9 @@ searchForm.addEventListener("submit", async (event) => {
     return;
   }
 
+  // Скидання номера поточної сторінки при новому пошуку
+  currentPage = 1;
+
   // Store the current user input
   currentQuery = query;
 
@@ -67,11 +70,9 @@ searchForm.addEventListener("submit", async (event) => {
       }));
 
       // Get the height of one gallery card
-      if (galleryContainer.children.length === 0) {
-        const firstCard = galleryContainer.appendChild(createGalleryCard(images[0]));
-        cardHeight = firstCard.getBoundingClientRect().height;
-        galleryContainer.innerHTML = "";
-      }
+      const firstCard = createGalleryCard(images[0]);
+galleryContainer.appendChild(firstCard);
+cardHeight = firstCard.getBoundingClientRect().height;
 
       updateGallery(images);
     } else {
@@ -89,6 +90,7 @@ searchForm.addEventListener("submit", async (event) => {
       position: "topRight",
     });
   } finally {
+    // Hide the loader once the images are loaded or an error occurs
     loader.style.display = "none";
     // Show/hide the "Load more" button based on totalHits and current gallery items
     toggleLoadMoreButton();
@@ -98,8 +100,8 @@ searchForm.addEventListener("submit", async (event) => {
 loadMoreBtn.addEventListener("click", async () => {
   loader.textContent = "Loading images, please wait...";
 
-try {
-  const response = await axios.get(`https://pixabay.com/api/`, {
+  try {
+    const response = await axios.get(`https://pixabay.com/api/`, {
       params: {
         key: apiKey,
         q: currentQuery,
@@ -133,27 +135,34 @@ try {
         position: "topRight",
       });
     }
-  }  catch (error) {
-  console.error("Error fetching data:", error);
-  iziToast.error({
-    title: "Error",
-    message: "An error occurred while fetching data. Please try again later.",
-    position: "topRight",
-  });
-} finally {
-  loader.style.display = "none"; // Hide the loader once the images are loaded
-  toggleLoadMoreButton();
-}
-loader.textContent = ""; // Set loader text to an empty string
-loader.style.display = "none"; // Hide the loader once the images are loaded
-toggleLoadMoreButton();
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    iziToast.error({
+      title: "Error",
+      message: "An error occurred while fetching data. Please try again later.",
+      position: "topRight",
+    });
+  } finally {
+    loader.textContent = ""; // Set loader text to an empty string
+    loader.style.display = "none"; // Hide the loader once the images are loaded
+
     // Smoothly scroll to the next set of images
     window.scrollBy({
       top: cardHeight * 2, // Scroll by twice the height of one card
       behavior: 'smooth',
     });
+
+    // Show/hide the "Load more" button based on totalHits and current gallery items
+    toggleLoadMoreButton();
   }
-);
+});
+
+    // Smoothly scroll to the next set of images
+    window.scrollBy({
+      top: cardHeight * 2, // Scroll by twice the height of one card
+      behavior: 'smooth',
+    });
+
 
 function updateGallery(images) {
   // Append new images to the gallery
