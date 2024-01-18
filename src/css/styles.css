@@ -91,6 +91,19 @@
   background: #6c8cff;
 }
 
+.loader {
+  color: #2e2f42;
+  font-family: Montserrat;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.5em;
+  letter-spacing: 0.64px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .gallery {
   display: flex;
   flex-wrap: wrap;
@@ -116,4 +129,8 @@ img {
   line-height: 1.5em;
   border: none;
   padding: 8px 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
 }
