@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/goit-js-hw-12/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/izitoast/dist/css/iziToast.min.css"
+    />
+    <title>GOIT-JS-HW-11</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&family=Montserrat&display=swap"
+    />
+    
+    <script type="module" crossorigin src="/goit-js-hw-12/commonHelpers.js"></script>
+    <link rel="modulepreload" crossorigin href="/goit-js-hw-12/assets/vendor-89feecc5.js">
+    <link rel="stylesheet" href="/goit-js-hw-12/assets/vendor-eb6030bc.css">
+    <link rel="stylesheet" href="/goit-js-hw-12/assets/index-db4011ba.css">
+  </head>
+  <body>
+    <header>
+      <div id="loader" class="loader"></div>
+    </header>
+
+    <section>
+      <div class="search-box">
+        <form id="search-form">
+          <input
+            class="search-box-input"
+            type="text"
+            id="search-input"
+            placeholder="Search images..."
+            required
+          />
+          <button class="search-btn" type="submit">Search</button>
+        </form>
+      </div>
+
+      <div id="gallery" class="gallery">
+        <a href="images/image1.jpg" data-lightbox="gallery" data-title=""
+          ><img src="images/thumbs/thumb1.jpg" alt="" title=""
+        /></a>
+        <a
+          href="images/image2.jpg"
+          data-lightbox="gallery"
+          data-title="Beautiful Image"
+          ><img src="images/thumbs/thumb2.jpg" alt="" title="Beautiful Image"
+        /></a>
+      </div>
+    </section>
+
+    <footer>
+      <button id="load-more-btn" class="load-more-btn" style="display: none">
+        Load more
+      </button>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/izitoast/dist/js/iziToast.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simplelightbox@2.1.2/dist/simple-lightbox.min.js"></script>
+    
+  </body>
+</html>
