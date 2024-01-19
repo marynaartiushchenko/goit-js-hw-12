@@ -23,6 +23,9 @@ let cardHeight = 0; // Variable to store the height of one gallery card
 searchForm.addEventListener("submit", async (event) => {
   event.preventDefault();
 
+  // Очистіть вміст галереї при новому пошуковому запиті
+  galleryContainer.innerHTML = "";
+
   const query = searchInput.value.trim();
 
   if (!query) {
@@ -41,64 +44,67 @@ searchForm.addEventListener("submit", async (event) => {
   currentQuery = query;
 
   // Show loader with a message
-  loader.textContent = "Loading images, please wait...";
-  loader.style.display = "block";
+loader.style.display = "block";
+loader.textContent = "Loading images, please wait...";
 
-  try {
+try {
     const response = await axios.get(`https://pixabay.com/api/`, {
-      params: {
-        key: apiKey,
-        q: currentQuery,
-        image_type: "photo",
-        orientation: "horizontal",
-        safesearch: true,
-        page: currentPage,
-        per_page: 40,
-      },
-    });
+    params: {
+      key: apiKey,
+      q: currentQuery,
+      image_type: "photo",
+      orientation: "horizontal",
+      safesearch: true,
+      page: currentPage,
+      per_page: 40,
+    },
+  });
 
-    const data = response.data;
+  const data = response.data;
 
-    if (data.hits && data.hits.length > 0) {
-      totalHits = data.totalHits; // Update totalHits
-      const images = data.hits.map((hit) => ({
-        url: hit.webformatURL,
-        alt: hit.tags,
-        largeUrl: hit.largeImageURL,
-        likes: hit.likes,
-        views: hit.views,
-        comments: hit.comments,
-        downloads: hit.downloads,
-      }));
+  if (data.hits && data.hits.length > 0) {
+    totalHits = data.totalHits; // Update totalHits
+    const images = data.hits.map((hit) => ({
+      url: hit.webformatURL,
+      alt: hit.tags,
+      largeUrl: hit.largeImageURL,
+      likes: hit.likes,
+      views: hit.views,
+      comments: hit.comments,
+      downloads: hit.downloads,
+    }));
 
-      // Get the height of one gallery card
-      const firstCard = createGalleryCard(images[0]);
-      galleryContainer.appendChild(firstCard);
-      cardHeight = firstCard.getBoundingClientRect().height;
+    // Вимкніть кнопку "Load more" при новому пошуковому запиті
+    loadMoreBtn.style.display = "none";
 
-      updateGallery(images);
-    } else {
-      iziToast.info({
-        title: "Info",
-        message: "Sorry, there are no images matching your search query. Please try again!",
-        position: "topRight",
-      });
-    }
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    iziToast.error({
-      title: "Error",
-      message: "An error occurred while fetching data. Please try again later.",
+    // Get the height of one gallery card
+    const firstCard = createGalleryCard(images[0]);
+    galleryContainer.appendChild(firstCard);
+    cardHeight = firstCard.getBoundingClientRect().height;
+
+    updateGallery(images);
+  } else {
+    iziToast.info({
+      title: "Info",
+      message: "Sorry, there are no images matching your search query. Please try again!",
       position: "topRight",
     });
-  } finally {
-    // Hide the loader once the images are loaded or an error occurs
-    loader.textContent = "";
-    loader.style.display = "none";
-
-    // Show/hide the "Load more" button based on totalHits and current gallery items
-    toggleLoadMoreButton();
   }
+} catch (error) {
+  console.error("Error fetching data:", error);
+  iziToast.error({
+    title: "Error",
+    message: "An error occurred while fetching data. Please try again later.",
+    position: "topRight",
+  });
+} finally {
+  // Hide the loader once the images are loaded or an error occurs
+  loader.textContent = ""; // Clear loader text
+  loader.style.display = "none";
+
+  // Show/hide the "Load more" button based on totalHits and current gallery items
+  toggleLoadMoreButton();
+}
 });
 
 loadMoreBtn.addEventListener("click", async () => {
@@ -152,6 +158,7 @@ loadMoreBtn.addEventListener("click", async () => {
     loader.textContent = ""; // Set loader text to an empty string
     loader.style.display = "none"; // Hide the loader once the images are loaded
 
+    
     // Smoothly scroll to the next set of images
     window.scrollBy({
       top: cardHeight * 2, // Scroll by twice the height of one card
@@ -163,11 +170,13 @@ loadMoreBtn.addEventListener("click", async () => {
   }
 });
 
-    // Smoothly scroll to the next set of images
-    window.scrollBy({
-      top: cardHeight * 2, // Scroll by twice the height of one card
-      behavior: 'smooth',
-    });
+   function scrollToNextSetOfImages() {
+  // Smoothly scroll to the next set of images
+  window.scrollBy({
+    top: cardHeight * 2, // Scroll by twice the height of one card
+    behavior: 'smooth',
+  });
+}
 
 
 function updateGallery(images) {
@@ -182,7 +191,8 @@ function updateGallery(images) {
     )
     .join('');
 
-  galleryContainer.innerHTML += galleryMarkup;
+  // Use insertAdjacentHTML to append new content without destroying existing elements
+  galleryContainer.insertAdjacentHTML('beforeend', galleryMarkup);
 
   // Refresh the lightbox after updating the gallery
   lightbox.refresh();
@@ -197,14 +207,15 @@ function toggleLoadMoreButton() {
     loadMoreBtn.style.display = "block";
   } else {
     loadMoreBtn.style.display = "none";
+
     // Display a message when the user reaches the end of search results
-    if (galleryContainer.children.length > 0) {
-      iziToast.info({
-        title: "Info",
-        message: "We're sorry, but you've reached the end of search results.",
-        position: "topRight",
-      });
-    }
+if (galleryContainer.children.length > 0 && currentPage > 1 && totalHits === galleryContainer.children.length) {
+  iziToast.info({
+    title: "Info",
+    message: "We're sorry, but you've reached the end of search results.",
+    position: "topRight",
+  });
+}
   }
 }
 
